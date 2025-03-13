@@ -7,7 +7,7 @@ public:
     Node *left;
     Node *right;
 
-    Node(int val): value(val), left(nullptr), right(nullptr) {
+    Node(int val) : value(val), left(nullptr), right(nullptr) {
     };
 
     virtual ~Node() {
@@ -17,6 +17,7 @@ public:
 class BST {
 private:
     Node *root;
+    int size;
     std::vector<Node *> v;
 
     void delete_vse(Node *cur) {
@@ -71,6 +72,10 @@ private:
         return min_order(cur->left);
     }
 
+    Node *min_order(Node *cur, int k, int &coutt){
+
+    }
+
     Node *search_order(Node *cur, int val) {
         if (!cur) return nullptr;
         if (val < cur->value) return search_order(cur->left, val);
@@ -78,7 +83,7 @@ private:
         return cur;
     }
 
-    void pop_order(Node * &cur, Node *parent, int val) {
+    void pop_order(Node *&cur, Node *parent, int val) {
         if (!cur) return;
         if (val < cur->value) {
             pop_order(cur->left, cur, val);
@@ -101,7 +106,7 @@ private:
         }
     }
 
-    void inject(Node *in, Node * &out) {
+    void inject(Node *in, Node *&out) {
         if (!in) return;
         out = insertNode(out, in->value);
         inject(in->left, out);
@@ -112,6 +117,11 @@ private:
 public:
     void insert(int val) {
         root = insertNode(root, val);
+        size++;
+    }
+
+    int len() const {
+        return size;
     }
 
     void display() {
@@ -158,6 +168,16 @@ public:
         else std::cout << "BST is empty!";
     }
 
+    void min(int k) {
+        if (k < 1 || k > size) {
+            std::cout << "Out of range\n";
+        } else if (k == 1) { std::cout << min_order(root); }
+        else {
+            int coutt = 0;
+            min_order(root, k, coutt);
+        }
+    }
+
     bool search(int val) {
         return search_order(root, val) != nullptr;
     }
@@ -170,7 +190,10 @@ public:
         pop_order(root, nullptr, val);
     }
 
-    BST(): root(nullptr) {
+    BST() {
+        root = nullptr;
+        size = 0;
+        v.clear();
     };
 
     virtual ~BST() {
@@ -192,10 +215,11 @@ int main() {
     BST tree;
     int choice, value;
     do {
-        showMenu();
         std::cout << "Enter choice: ";
         std::cin >> choice;
         switch (choice) {
+            case 0:
+                break;
             case 1:
                 tree.display();
                 break;
@@ -222,6 +246,13 @@ int main() {
                 tree.max();
                 std::cout << std::endl;
                 break;
+            case 777:
+                showMenu();
+                break;
+            default:
+                std::cout << "CHOISE IS MENU!!!\n";
+                break;
+
         }
     } while (choice != 0);
     return 0;
